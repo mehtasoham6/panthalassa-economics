@@ -1,0 +1,96 @@
+{
+  "_source": "Extracted from McCalip MHTML (Economics_of_Orbital_vs_Terrestrial_Data_Centers.mhtml) — Phase 1",
+  "_method": "Bar widths normalized to orbital-hardware bar ($23.6B at defaults); dc_infra fractions back-calculated at dc_infra_per_W=$12.5, capacity=1GW",
+
+  "defaults": {
+    "capacity_GW": 1,
+    "years": 5,
+    "dc_infra_per_W": 12.5,
+    "gas_turbine_capex_per_W": 1.80,
+    "heat_rate_BTU_per_kWh": 6200,
+    "gas_price_per_MMBtu": 4.30,
+    "pue": 1.20,
+    "capacity_factor": 0.85
+  },
+
+  "slider_ranges": {
+    "dc_infra_per_W":           { "min": 10,    "max": 17,   "step": 0.25 },
+    "gas_turbine_capex_per_W":  { "min": 1.45,  "max": 2.30, "step": 0.05 },
+    "heat_rate_BTU_per_kWh":    { "min": 6000,  "max": 9000, "step": 100  },
+    "gas_price_per_MMBtu":      { "min": 2,     "max": 15,   "step": 0.1  },
+    "pue":                      { "min": 1.10,  "max": 1.50, "step": 0.05 }
+  },
+
+  "bar_chart": {
+    "_note": "6 bars in comparison panel. power_gen and fuel are computed separately; the four dc_infra bars are fractions of (dc_infra_per_W * capacity_GW * 1e9).",
+
+    "power_gen": {
+      "label": "Power Gen",
+      "tooltip": "Power Generation - gas turbine equipment cost",
+      "formula": "gas_turbine_capex_per_W * pue * capacity_GW * 1e9",
+      "rendered_default": "$2.2B"
+    },
+    "electrical": {
+      "label": "Electrical",
+      "fraction_of_dc_infra": 0.42,
+      "formula": "0.42 * dc_infra_per_W * capacity_GW * 1e9",
+      "rendered_default": "$5.3B"
+    },
+    "mechanical": {
+      "label": "Mechanical",
+      "fraction_of_dc_infra": 0.24,
+      "formula": "0.24 * dc_infra_per_W * capacity_GW * 1e9",
+      "rendered_default": "$3.0B"
+    },
+    "civil_shell": {
+      "label": "Civil/Shell",
+      "fraction_of_dc_infra": 0.20,
+      "formula": "0.20 * dc_infra_per_W * capacity_GW * 1e9",
+      "rendered_default": "$2.5B"
+    },
+    "fitout": {
+      "label": "Fit-out",
+      "tooltip": "Interior fit-out, networking, racks, and cabling",
+      "fraction_of_dc_infra": 0.14,
+      "formula": "0.14 * dc_infra_per_W * capacity_GW * 1e9",
+      "rendered_default": "$1.8B"
+    },
+    "fuel": {
+      "label": "Fuel",
+      "formula": "capacity_GW * 1000 * pue * 8760 * capacity_factor * years * heat_rate_BTU_per_kWh * gas_price_per_MMBtu / 1e6",
+      "_units": "result in $; heat_rate in BTU/kWh, gas_price in $/MMBtu, 1 MMBtu = 1000 BTU/scf * 1000 scf",
+      "rendered_default": "$1.2B"
+    }
+  },
+
+  "dc_infra_sub_breakdown": {
+    "_note": "6-item reference breakdown shown inline under the dc_infra slider (McCalip's Engineering Parameters section). These are industry-standard fractions used as an explanatory label, NOT the same grouping as the 4 bar-chart bars above.",
+    "electrical":    { "fraction": 0.45, "rendered_per_W": "$5.63/W" },
+    "mechanical":    { "fraction": 0.20, "rendered_per_W": "$2.50/W" },
+    "shell_core":    { "fraction": 0.17, "rendered_per_W": "$2.13/W" },
+    "fitout":        { "fraction": 0.08, "rendered_per_W": "$1.00/W" },
+    "site_civil":    { "fraction": 0.05, "rendered_per_W": "$0.63/W" },
+    "gen_cond_fees": { "fraction": 0.05, "rendered_per_W": "$0.63/W" }
+  },
+
+  "headline_stats_at_defaults": {
+    "total_cost":        "$15.9B",
+    "cost_per_watt":     "$15.85/W",
+    "lcoe":              "$426/MWh",
+    "capex_per_watt":    "$14.66/W",
+    "turbines":          "3 H-class units",
+    "generation_MW":     1200,
+    "gas_consumption":   "277 BCF (5 yr)",
+    "energy_output_MWh": "37,230,000 MWh (5 yr, IT load)"
+  },
+
+  "derived_formulas": {
+    "total_capex":       "power_gen + dc_infra_cost = (gas_turbine_capex_per_W * pue + dc_infra_per_W) * capacity_GW * 1e9",
+    "total_cost":        "total_capex + fuel_cost",
+    "cost_per_watt":     "total_cost / (capacity_GW * 1e9)",
+    "energy_MWh":        "capacity_GW * 1000 * capacity_factor * 8760 * years",
+    "lcoe":              "total_cost / energy_MWh",
+    "turbine_count":     "ceil(capacity_GW * 1000 / 400)",
+    "_turbine_note":     "H-class GE 7HA / Siemens SGT6-8000H ≈ 400 MW each; 1 GW * 1.2 PUE / 400 = 3 units"
+  }
+}
