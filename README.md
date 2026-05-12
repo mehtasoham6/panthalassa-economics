@@ -1,6 +1,6 @@
 Model Documentation
 
-This dashboard models the total cost of building and operating a compute deployment at a given nameplate capacity over a fixed analysis window, under two scenarios: a fleet of ocean-based wave-energy nodes (Panthalassa) and a conventional terrestrial data center powered by a combined-cycle gas turbine (CCGT). Both models reduce to the same two output metrics: cost per watt ($/W) and levelized cost of energy (LCOE, in $/MWh), so they can be compared on a like-for-like basis. Importantly, 
+This dashboard models the total cost of building and operating a compute deployment at a given nameplate capacity over a fixed analysis window, under two scenarios: a fleet of ocean-based wave-energy nodes (Panthalassa) and a conventional terrestrial data center powered by a combined-cycle gas turbine (CCGT). Both models reduce to the same two output metrics: cost per watt and levelized cost of energy (LCOE, in $/MWh), so they can be compared on a like-for-like basis. Importantly, 
 Ocean Model (Panthalassa)
 
 Fleet Sizing
