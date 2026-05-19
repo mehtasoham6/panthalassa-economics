@@ -91,9 +91,19 @@
         <div class="bar-value" id="terrestrial-civil-value">—</div>
       </div>
       <div class="bar-item">
-        <div class="bar-label" title="Interior fit-out, networking, racks, and cabling">Fit-out</div>
+        <div class="bar-label" title="Interior fit-out, racks, and cabling (excluding networking)">Fit-out</div>
         <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-fitout-bar" style="width:0%;"></div></div>
         <div class="bar-value" id="terrestrial-fitout-value">—</div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label" title="GPU interconnect fabric — InfiniBand, transceivers, structured cabling, PDUs">Networking</div>
+        <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-networking-bar" style="width:0%;"></div></div>
+        <div class="bar-value" id="terrestrial-networking-value">—</div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label" title="Maintenance + operating labor + water (annual OPEX)">Operations</div>
+        <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-opex-bar" style="width:0%;"></div></div>
+        <div class="bar-value" id="terrestrial-opex-value">—</div>
       </div>
       <div class="bar-item">
         <div class="bar-label">Fuel</div>
@@ -149,8 +159,7 @@
 
   <!-- §1 ── Introduction ────────────────────────────────────────────────── -->
   <section class="paper-section intro-section" id="intro">
-    <p class="drop-cap">TK-opening paragraph</p>
-    <p>TK-second paragraph</p>
+    <p class="drop-cap">TK — opening paragraph</p>
     <p class="essay-note">
       <strong>Note:</strong> Built from publicly available information and
       first-principles modeling. No proprietary data. Move the sliders.
@@ -234,9 +243,19 @@
             <div class="bar-value" id="terrestrial-civil-value-mobile">—</div>
           </div>
           <div class="bar-item">
-            <div class="bar-label" title="Interior fit-out, networking, racks, and cabling">Fit-out</div>
+            <div class="bar-label" title="Interior fit-out, racks, and cabling (excluding networking)">Fit-out</div>
             <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-fitout-bar-mobile" style="width:0%;"></div></div>
             <div class="bar-value" id="terrestrial-fitout-value-mobile">—</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label" title="GPU interconnect fabric — InfiniBand, transceivers, structured cabling, PDUs">Networking</div>
+            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-networking-bar-mobile" style="width:0%;"></div></div>
+            <div class="bar-value" id="terrestrial-networking-value-mobile">—</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label" title="Maintenance + operating labor + water (annual OPEX)">Operations</div>
+            <div class="bar-container"><div class="bar terrestrial-bar" id="terrestrial-opex-bar-mobile" style="width:0%;"></div></div>
+            <div class="bar-value" id="terrestrial-opex-value-mobile">—</div>
           </div>
           <div class="bar-item">
             <div class="bar-label">Fuel</div>
@@ -360,11 +379,11 @@
 
         <div class="slider-container">
           <div class="slider-header">
-            <span class="slider-label">Delivered Node Cost <span class="info-icon" data-tip="All-in cost to fabricate one node, tow it to site, and commission it on station.">&#9432;</span></span>
-            <span class="slider-value" id="delivery-cost-value">$4M</span>
+            <span class="slider-label">Deployment Cost <span class="info-icon" data-tip="Cost to tow a completed node to its deployment site and commission it on station — tug charter, fuel, crew, and on-site activation. Fabrication is captured separately in Node Hardware Cost.">&#9432;</span></span>
+            <span class="slider-value" id="delivery-cost-value">$1.5M</span>
           </div>
           <div class="slider-track-container">
-            <input type="range" id="delivery-cost-slider" min="1" max="50" step="1" value="4">
+            <input type="range" id="delivery-cost-slider" min="0.5" max="10" step="0.1" value="1.5">
             <div class="slider-track"></div>
             <div class="slider-fill ocean-fill" id="delivery-cost-fill" style="width:6.12%;"></div>
           </div>
@@ -604,10 +623,10 @@
         <div class="slider-container">
           <div class="slider-header">
             <span class="slider-label">PUE <span class="info-icon" data-tip="Power Usage Effectiveness &#8212; ratio of total facility power to IT power. 1.0 means no overhead.">&#9432;</span></span>
-            <span class="slider-value" id="pue-value">1.20</span>
+            <span class="slider-value" id="pue-value">1.35</span>
           </div>
           <div class="slider-track-container">
-            <input type="range" id="pue-slider" min="1.1" max="1.5" step="0.05" value="1.2">
+            <input type="range" id="pue-slider" min="1.1" max="1.5" step="0.05" value="1.35">
             <div class="slider-track"></div>
             <div class="slider-fill terrestrial-fill" id="pue-fill" style="width:25%;"></div>
           </div>
@@ -630,6 +649,38 @@
           <div class="slider-ticks">
             <span class="tick">5%</span>
             <span class="tick">15%</span>
+          </div>
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-header">
+            <span class="slider-label">Networking &amp; Interconnect <span class="info-icon" data-tip="GPU interconnect fabric cost per watt of IT capacity — InfiniBand switches, transceivers, structured cabling, and PDUs. GovAI TCO analysis (Dec 2025) puts this at $4.42/W for a DGX SuperPOD-class facility.">&#9432;</span></span>
+            <span class="slider-value" id="networking-value">$4.42/W</span>
+          </div>
+          <div class="slider-track-container">
+            <input type="range" id="networking-slider" min="1.75" max="6.00" step="0.05" value="4.42">
+            <div class="slider-track"></div>
+            <div class="slider-fill terrestrial-fill" id="networking-fill" style="width:62.35%;"></div>
+          </div>
+          <div class="slider-ticks">
+            <span class="tick">$1.75 (Basic)</span>
+            <span class="tick">$6.00 (HPC)</span>
+          </div>
+        </div>
+
+        <div class="slider-container">
+          <div class="slider-header">
+            <span class="slider-label">Maintenance Cost <span class="info-icon" data-tip="Annual facility maintenance per MW of IT capacity — filter replacement, UPS testing, equipment repair. GovAI TCO: $120k/MW-yr.">&#9432;</span></span>
+            <span class="slider-value" id="te-maint-value">$120k/MW-yr</span>
+          </div>
+          <div class="slider-track-container">
+            <input type="range" id="te-maint-slider" min="50000" max="250000" step="5000" value="120000">
+            <div class="slider-track"></div>
+            <div class="slider-fill terrestrial-fill" id="te-maint-fill" style="width:35%;"></div>
+          </div>
+          <div class="slider-ticks">
+            <span class="tick">$50k</span>
+            <span class="tick">$250k</span>
           </div>
         </div>
 
@@ -688,8 +739,16 @@
             <span class="eng-stat-label">Cooling Infrastructure</span>
             <span class="eng-stat-value">$0</span>
           </div>
+          <div class="eng-stat-row">
+            <span class="eng-stat-label">Effective PUE</span>
+            <span class="eng-stat-value">~1.0</span>
+          </div>
+          <div class="eng-stat-row">
+            <span class="eng-stat-label">Networking &amp; GPU Interconnect</span>
+            <span class="eng-stat-value">$0</span>
+          </div>
         </div>
-        <p class="eng-cooling-note">Seawater at 5–15°C provides free convection cooling — no chillers, cooling towers, or water treatment systems required. The terrestrial side pays for this through the Mechanical line item in the infrastructure cost (typically $1.50–2.50/W for cooling plant alone). This is one of ocean compute's largest structural advantages and is already reflected in the $/W comparison above.</p>
+        <p class="eng-cooling-note">Seawater at 5–15°C provides free convection cooling — no chillers, cooling towers, or water treatment required. Effective PUE is ~1.0: every watt drawn goes to compute. The terrestrial side's PUE of 1.35 means 35% of total facility power goes to cooling and support systems, not compute. Each Panthalassa node also operates independently via satellite uplink, eliminating the GPU interconnect fabric (InfiniBand switches, transceivers, structured cabling) that runs $1.75–4.42/W in a conventional facility. The workload constraint and the cost advantage are two sides of the same coin.</p>
       </div>
 
       <!-- Terrestrial card -->
@@ -727,6 +786,22 @@
             <span class="eng-stat-label">Energy Output</span>
             <span class="eng-stat-value" id="eng-ngcc-energy">—</span>
           </div>
+          <div class="eng-stat-row">
+            <span class="eng-stat-label">Networking &amp; Interconnect</span>
+            <span class="eng-stat-value" id="eng-te-networking">—</span>
+          </div>
+          <div class="eng-stat-row">
+            <span class="eng-stat-label">Maintenance OPEX</span>
+            <span class="eng-stat-value" id="eng-te-maint-opex">—</span>
+          </div>
+          <div class="eng-stat-row">
+            <span class="eng-stat-label">Labor OPEX</span>
+            <span class="eng-stat-value" id="eng-te-labor-opex">—</span>
+          </div>
+          <div class="eng-stat-row">
+            <span class="eng-stat-label">Water OPEX</span>
+            <span class="eng-stat-value" id="eng-te-water-opex">—</span>
+          </div>
         </div>
       </div>
 
@@ -747,8 +822,8 @@
         <div class="assumption-content">
           <p class="assumption-scope-lead">This model assumes <strong>node-independent workloads</strong> — inference, fine-tuning, and small-batch training jobs that run entirely within a single node's compute capacity.</p>
           <ul class="assumption-bullets">
-            <li>Panthalassa nodes connect via <strong>satellite uplink, not fiber</strong>. Inter-node bandwidth is orders of magnitude lower than terrestrial data center interconnects. Tightly-coupled distributed training across multiple nodes — the kind required to train frontier models — is not feasible with this architecture. The $/W and LCOE figures in this model apply only to workloads that fit on a single node independently.</li>
-            <li><strong>Large data transfers</strong> (model weights, training datasets) may require physical transport of storage media by vessel, introducing multi-day latency for bulk data movement. The satellite backhaul cost line covers real-time egress only, not bulk ingest. Plan accordingly for workloads that require frequent large dataset updates.</li>
+            <li>Panthalassa nodes connect via <strong>satellite uplink, not fiber</strong>. Inter-node bandwidth is orders of magnitude lower than terrestrial data center interconnects. Tightly-coupled distributed training across multiple nodes — the kind required to train frontier models — is not feasible with this architecture. This constraint also eliminates one of terrestrial data centers' largest capital costs: the GPU interconnect fabric (InfiniBand switches, transceivers, structured cabling), which runs $1.75–4.42/W in a conventional facility. <strong>The workload limitation and the cost advantage are two sides of the same coin.</strong></li>
+            <li><strong>Large data transfers</strong> (model weights, training datasets) may require physical transport of storage media by vessel, introducing multi-day latency for bulk data movement. The satellite backhaul cost line covers real-time egress only, not bulk ingest.</li>
           </ul>
         </div>
       </div>
@@ -778,9 +853,9 @@
             <li>No decommissioning, retrieval, or disposal costs.</li>
             <li>Satellite backhaul priced at flat $/Gbps-yr; no congestion, latency, or coverage-gap modeling.</li>
             <li>No regulatory, permitting, or insurance cost included.</li>
-            <li><strong>Catastrophic loss rate</strong> covers storms, sinking, and unrecoverable electrical failures. Per-node replacement cost = delivered cost + node HW cost. Applied as a compounding annual probability over the analysis period.</li>
+            <li><strong>Catastrophic loss rate</strong> covers storms, sinking, and unrecoverable electrical failures. Per-node replacement cost = deployment cost + node HW cost. Applied as a compounding annual probability over the analysis period.</li>
             <li><strong>Spare fleet</strong> inflates total nodes procured and deployed beyond the active count needed to meet capacity. Spare nodes contribute to all cost lines (fleet, delivery, ops, catastrophic base) but not to energy output.</li>
-            <li><strong>Supply chain multiplier</strong> is a step function applied to Node Fleet and Delivery costs based on total fleet size: baseline (≤200 nodes), 0.85× volume discount (201–500), 0.80× deeper discount (501–2000), 0.90× partial bottleneck erosion (&gt;2000). At very large fleet sizes, the model assumes Panthalassa becomes a price-moving buyer of steel plate and turbine components, partially eroding discounts. The crossover thresholds are illustrative — real dynamics depend on global steel and turbine market conditions.</li>
+            <li><strong>Supply chain multiplier</strong> is a step function applied to Node Fleet and Deployment costs based on total fleet size: baseline (≤200 nodes), 0.85× volume discount (201–500), 0.80× deeper discount (501–2000), 0.90× partial bottleneck erosion (&gt;2000). At very large fleet sizes, the model assumes Panthalassa becomes a price-moving buyer of steel plate and turbine components, partially eroding discounts. The crossover thresholds are illustrative — real dynamics depend on global steel and turbine market conditions.</li>
             <li><strong>Ocean discount rate</strong> (default 12%) reflects the higher risk premium appropriate for a first-of-kind marine infrastructure program vs. established terrestrial construction.</li>
           </ul>
         </div>

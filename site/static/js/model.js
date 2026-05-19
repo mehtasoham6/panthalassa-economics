@@ -47,25 +47,30 @@ function computeOcean(i) {
 }
 
 function computeTerrestrial(i) {
-  const dc_cost   = i.dc_infra_per_W * i.capacity_GW * 1e9;
-  const pgen_cost = i.gas_turbine_capex_per_W * i.pue * i.capacity_GW * 1e9;
-  const elec      = 0.42 * dc_cost;
-  const mech      = 0.24 * dc_cost;
-  const civil     = 0.20 * dc_cost;
-  const fitout    = 0.14 * dc_cost;
-  const kwh_total = i.capacity_GW * 1000 * i.pue * 8760 * 0.85 * i.years * 1e3;
-  const fuel_cost = kwh_total * i.heat_rate_BTU_per_kWh * i.gas_price_per_MMBtu / 1e6;
-  const total     = dc_cost + pgen_cost + fuel_cost;
-  const energy    = i.capacity_GW * 1000 * 0.85 * 8760 * i.years;
-  const turbines  = Math.ceil(i.capacity_GW * 1000 * i.pue / 400);
-  const gas_BCF   = kwh_total * i.heat_rate_BTU_per_kWh / 1e12;
+  const dc_cost    = i.dc_infra_per_W * i.capacity_GW * 1e9;
+  const pgen_cost  = i.gas_turbine_capex_per_W * i.pue * i.capacity_GW * 1e9;
+  const networking = i.networking_per_W * i.capacity_GW * 1e9;
+  const elec       = 0.42 * dc_cost;
+  const mech       = 0.24 * dc_cost;
+  const civil      = 0.20 * dc_cost;
+  const fitout     = 0.14 * dc_cost;
+  const kwh_total  = i.capacity_GW * 1000 * i.pue * 8760 * 0.85 * i.years * 1e3;
+  const fuel_cost  = kwh_total * i.heat_rate_BTU_per_kWh * i.gas_price_per_MMBtu / 1e6;
+  const maint_opex = i.te_maint_per_MW_yr * i.capacity_GW * 1000 * i.years;
+  const labor_opex = 40_000 * i.capacity_GW * 1000 * i.years;
+  const water_opex = 5_000  * i.capacity_GW * 1000 * i.years;
+  const opex_total = maint_opex + labor_opex + water_opex;
+  const total      = dc_cost + pgen_cost + networking + fuel_cost + opex_total;
+  const energy     = i.capacity_GW * 1000 * 0.85 * 8760 * i.years;
+  const turbines   = Math.ceil(i.capacity_GW * 1000 * i.pue / 400);
+  const gas_BCF    = kwh_total * i.heat_rate_BTU_per_kWh / 1e12;
 
-  // NPV: capex (dc + pgen) at year 0; fuel recurring
-  const r   = i.terrestrial_discount_rate;
-  const ann = r > 0 ? (1 - Math.pow(1 + r, -i.years)) / r : i.years;
-  const annual_fuel = fuel_cost / i.years;
-  const npv_total   = dc_cost + pgen_cost + annual_fuel * ann;
-  const npv_energy  = i.capacity_GW * 1000 * 0.85 * 8760 * ann;
+  // NPV: capex (dc + pgen + networking) at year 0; fuel + opex recurring
+  const r            = i.terrestrial_discount_rate;
+  const ann          = r > 0 ? (1 - Math.pow(1 + r, -i.years)) / r : i.years;
+  const annual_opex  = (fuel_cost + opex_total) / i.years;
+  const npv_total    = dc_cost + pgen_cost + networking + annual_opex * ann;
+  const npv_energy   = i.capacity_GW * 1000 * 0.85 * 8760 * ann;
 
-  return { dc_cost, pgen_cost, elec, mech, civil, fitout, fuel_cost, total, energy, turbines, gas_BCF, npv_total, npv_energy };
+  return { dc_cost, pgen_cost, networking, elec, mech, civil, fitout, fuel_cost, maint_opex, labor_opex, water_opex, opex_total, total, energy, turbines, gas_BCF, npv_total, npv_energy };
 }
