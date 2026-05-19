@@ -24,6 +24,8 @@ function readInputs() {
     gas_price_per_MMBtu:            v('gas-price-slider'),
     pue:                            v('pue-slider'),
     terrestrial_discount_rate:      v('te-discount-slider'),
+    networking_per_W:               v('networking-slider'),
+    te_maint_per_MW_yr:             v('te-maint-slider'),
   };
 }
 
@@ -45,7 +47,7 @@ function recompute() {
   const te_cpw      = te.total / (inp.capacity_GW * 1e9);
   const te_lcoe     = te.total / te.energy;
   const te_npv_lcoe = te.npv_total / te.npv_energy;
-  const te_capex_cpw = (te.dc_cost + te.pgen_cost) / (inp.capacity_GW * 1e9);
+  const te_capex_cpw = (te.dc_cost + te.pgen_cost + te.networking) / (inp.capacity_GW * 1e9);
 
   // Normalise bars to the largest single cost component
   const ref = Math.max(oc.hw, oc.delivery, oc.backhaul, oc.nre_ops_hull, te.elec);
@@ -75,12 +77,14 @@ function recompute() {
   // Terrestrial bars (normalised to ocean hw as reference)
   const te_ref = oc.hw;
   const tp = x => Math.min(100, (x / te_ref * 100)).toFixed(2) + '%';
-  setBar('terrestrial-powergen',   tp(te.pgen_cost), fmt_B(te.pgen_cost));
-  setBar('terrestrial-electrical', tp(te.elec),      fmt_B(te.elec));
-  setBar('terrestrial-mechanical', tp(te.mech),      fmt_B(te.mech));
-  setBar('terrestrial-civil',      tp(te.civil),     fmt_B(te.civil));
-  setBar('terrestrial-fitout',     tp(te.fitout),    fmt_B(te.fitout));
-  setBar('terrestrial-fuel',       tp(te.fuel_cost), fmt_B(te.fuel_cost));
+  setBar('terrestrial-powergen',   tp(te.pgen_cost),   fmt_B(te.pgen_cost));
+  setBar('terrestrial-electrical', tp(te.elec),        fmt_B(te.elec));
+  setBar('terrestrial-mechanical', tp(te.mech),        fmt_B(te.mech));
+  setBar('terrestrial-civil',      tp(te.civil),       fmt_B(te.civil));
+  setBar('terrestrial-fitout',     tp(te.fitout),      fmt_B(te.fitout));
+  setBar('terrestrial-networking', tp(te.networking),  fmt_B(te.networking));
+  setBar('terrestrial-opex',       tp(te.opex_total),  fmt_B(te.opex_total));
+  setBar('terrestrial-fuel',       tp(te.fuel_cost),   fmt_B(te.fuel_cost));
 
   // Ocean stats
   setText('ocean-total',        fmt_B(oc.total));
@@ -121,6 +125,10 @@ function recompute() {
   eg('eng-ngcc-fuel-cost',          '$' + Math.round(te.fuel_cost / te.energy) + '/MWh');
   eg('eng-ngcc-gas-consumption',    Math.round(te.gas_BCF) + ' BCF');
   eg('eng-ngcc-energy',             (te.energy / 1e6).toFixed(2) + 'M MWh');
+  eg('eng-te-networking',           fmt_B(te.networking) + ' ($' + inp.networking_per_W.toFixed(2) + '/W)');
+  eg('eng-te-maint-opex',           fmt_B(te.maint_opex));
+  eg('eng-te-labor-opex',           fmt_B(te.labor_opex));
+  eg('eng-te-water-opex',           fmt_B(te.water_opex));
 
   // Auto-fill findings callout
   const fc = document.getElementById('findings-callout');
@@ -148,7 +156,7 @@ function recompute() {
   updateFill('node-rating-slider',   'node-rating-fill',    0.25,  10);
   updateFill('availability-slider',  'availability-fill',   0.30,  0.85);
   updateFill('node-hw-slider',       'node-hw-fill',        1,     10);
-  updateFill('delivery-cost-slider', 'delivery-cost-fill',  1,     50);
+  updateFill('delivery-cost-slider', 'delivery-cost-fill',  0.5,   10);
   updateFill('biofouling-slider',    'biofouling-fill',     1,     10);
   updateFill('egress-slider',        'egress-fill',         1,     20);
   updateFill('backhaul-slider',      'backhaul-fill',       10000, 200000);
@@ -162,8 +170,10 @@ function recompute() {
   updateFill('gas-turbine-slider',   'gas-turbine-fill',    1.45,  2.30);
   updateFill('heat-rate-slider',     'heat-rate-fill',      6000,  9000);
   updateFill('gas-price-slider',     'gas-price-fill',      2,     15);
-  updateFill('pue-slider',           'pue-fill',            1.1,   1.5);
-  updateFill('te-discount-slider',   'te-discount-fill',    0.05,  0.15);
+  updateFill('pue-slider',           'pue-fill',            1.1,    1.5);
+  updateFill('te-discount-slider',   'te-discount-fill',    0.05,   0.15);
+  updateFill('networking-slider',    'networking-fill',     1.75,   6.00);
+  updateFill('te-maint-slider',      'te-maint-fill',       50000,  250000);
 
   // Slider value labels
   document.getElementById('capacity-value').textContent      = inp.capacity_GW + ' GW';
@@ -187,6 +197,8 @@ function recompute() {
   document.getElementById('gas-price-value').textContent     = '$' + inp.gas_price_per_MMBtu.toFixed(2) + '/MMBtu';
   document.getElementById('pue-value').textContent           = inp.pue.toFixed(2);
   document.getElementById('te-discount-value').textContent   = Math.round(inp.terrestrial_discount_rate * 100) + '%';
+  document.getElementById('networking-value').textContent    = '$' + inp.networking_per_W.toFixed(2) + '/W';
+  document.getElementById('te-maint-value').textContent      = '$' + (inp.te_maint_per_MW_yr / 1000).toFixed(0) + 'k/MW-yr';
 }
 
 // Wire all sliders + render KaTeX equation
